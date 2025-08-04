@@ -1,8 +1,10 @@
 import Papa from 'papaparse';
 
-export function loadCSV(path) {
+export function loadCSV(relativePath) {
+  const fullPath = process.env.BASE_URL + relativePath;
+
   return new Promise((resolve, reject) => {
-    Papa.parse(path, {
+    Papa.parse(fullPath, {
       download: true,
       header: true,
       dynamicTyping: true,
@@ -11,5 +13,3 @@ export function loadCSV(path) {
     });
   });
 }
-
-
