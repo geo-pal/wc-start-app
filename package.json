@@ -1,10 +1,13 @@
 {
   "name": "wc-start-app",
+  "homepage": "https://geo-pal.github.io/wc-start-app",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build"
+    "build": "vue-cli-service build",
+    "deploy": "gh-pages -d dist"
+
   },
   "dependencies": {
     "bootstrap": "^5.3.7",
