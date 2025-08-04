@@ -7,6 +7,7 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "deploy": "gh-pages -d dist"
+
   },
   "dependencies": {
     "bootstrap": "^5.3.7",
@@ -22,7 +23,6 @@
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~5.0.0",
-    "@vue/cli-service": "~5.0.0",
-    "gh-pages": "^6.3.0"
+    "@vue/cli-service": "~5.0.0"
   }
 }
