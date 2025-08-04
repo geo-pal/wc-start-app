@@ -1,0 +1,18 @@
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #121212;
+  color: #f1f1f1;
+}
+
+.card, header {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+canvas {
+  background: transparent;
+}
+
+.chart-container canvas {
+  height: auto !important;
+}
