@@ -1,11 +1,13 @@
 <template>
   <div class="card bg-dark text-light h-100 d-flex flex-column">
+    <!-- Header -->
     <div
       class="header-box bg-success text-white text-center w-100 py-2 px-3 rounded mb-3"
     >
       <h2 class="h6 m-0">World Cup Winners</h2>
     </div>
 
+    <!-- Chart container -->
     <div
       class="card-body p-2 flex-grow-1 d-flex align-items-center justify-content-center"
     >
@@ -21,65 +23,77 @@ import { loadCSV } from "../utils/loadCSV";
 import { Chart } from "chart.js/auto";
 
 export default {
+  name: "WorldCupWinners",
+
   async mounted() {
-    const data = await loadCSV("/WorldCups.csv");
-    const wins = {};
+    try {
+      // Load World Cup data from CSV
+      const data = await loadCSV("/WorldCups.csv");
 
-    const normalizeWinnerName = (name) => {
-      if (!name) return "";
-      return name
-        .replace(/Germany FR/g, "Germany")
-        .replace(/West Germany/g, "Germany")
-        .trim();
-    };
+      // Object to hold count of wins per team
+      const wins = {};
 
-    data.forEach((d) => {
-      const winner = normalizeWinnerName(d.Winner);
-      if (winner && winner !== "undefined" && winner !== "") {
-        wins[winner] = (wins[winner] || 0) + 1;
-      }
-    });
+      // Normalize team names for consistency
+      const normalizeWinnerName = (name) => {
+        if (!name) return "";
+        return name
+          .replace(/Germany FR/g, "Germany")
+          .replace(/West Germany/g, "Germany")
+          .trim();
+      };
 
-    // Sort winners by count descending
-    const sortedEntries = Object.entries(wins).sort((a, b) => b[1] - a[1]);
-    const labels = sortedEntries.map(([team]) => team);
-    const dataValues = sortedEntries.map(([, count]) => count);
+      // Count wins per normalized team name
+      data.forEach((d) => {
+        const winner = normalizeWinnerName(d.Winner);
+        if (winner && winner !== "undefined") {
+          wins[winner] = (wins[winner] || 0) + 1;
+        }
+      });
 
-    new Chart(this.$refs.chart, {
-      type: "doughnut",
-      data: {
-        labels,
-        datasets: [
-          {
-            data: dataValues,
-            backgroundColor: [
-              "#fdcb6e",
-              "#e17055",
-              "#00b894",
-              "#74b9ff",
-              "#a29bfe",
-              "#fab1a0",
-              "#55efc4",
-              "#ffeaa7",
-              "#dfe6e9",
-            ].slice(0, labels.length),
-            borderColor: "black",
-            borderWidth: 2,
-          },
-        ],
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        cutout: "50%",
-        plugins: {
-          legend: {
-            position: "right",
-            labels: { color: "#fff" },
+      // Sort teams by number of wins in descending order
+      const sortedEntries = Object.entries(wins).sort((a, b) => b[1] - a[1]);
+      const labels = sortedEntries.map(([team]) => team);
+      const dataValues = sortedEntries.map(([, count]) => count);
+
+      // Initialize doughnut chart with Chart.js
+      new Chart(this.$refs.chart, {
+        type: "doughnut",
+        data: {
+          labels,
+          datasets: [
+            {
+              data: dataValues,
+              backgroundColor: [
+                "#fdcb6e",
+                "#e17055",
+                "#00b894",
+                "#74b9ff",
+                "#a29bfe",
+                "#fab1a0",
+                "#55efc4",
+                "#ffeaa7",
+                "#dfe6e9",
+              ].slice(0, labels.length),
+              borderColor: "#000",
+              borderWidth: 2,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          cutout: "50%",
+          plugins: {
+            legend: {
+              position: "right",
+              labels: { color: "#fff" },
+            },
           },
         },
-      },
-    });
+      });
+    } catch (error) {
+      console.error("Error loading or rendering chart:", error);
+    }
   },
 };
 </script>
